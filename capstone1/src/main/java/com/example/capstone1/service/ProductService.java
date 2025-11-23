@@ -1,11 +1,14 @@
 package com.example.capstone1.service;
 
 import com.example.capstone1.model.Product;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-
+@Data
 @Service
+@AllArgsConstructor
 public class ProductService {
 
 
@@ -48,7 +51,7 @@ public class ProductService {
         return null;
     }
 
-    //endpoint
+    //endpoint ProductServes
     public ArrayList<Product> searchProductsByName(String name) {
         ArrayList<Product> result = new ArrayList<>();
         String search = name.toLowerCase();
@@ -59,6 +62,32 @@ public class ProductService {
             }
         }
         return result;
+    }
+
+    // change the price of a proudct
+    public boolean changePrice(String productId, double newPrice) {
+        if (newPrice <= 0) return false;
+        for (Product p : products) {
+            if (p.getId().equals(productId)) {
+                p.setPrice(newPrice);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Discount
+    public boolean applyDiscount(String productId, double percentage) {
+        for (Product p : products) {
+            if (p.getId().equals(productId)) {
+                double discount = p.getPrice() * (percentage / 100.0);
+                double newPrice = p.getPrice() - discount;
+                if (newPrice <= 0) return false;
+                p.setPrice(newPrice);
+                return true;
+            }
+        }
+        return false;
     }
 
 

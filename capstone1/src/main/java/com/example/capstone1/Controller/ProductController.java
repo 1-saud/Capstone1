@@ -75,4 +75,25 @@ public class ProductController {
         return ResponseEntity.ok(lastProduct);
     }
 
+    // endpoint change price
+    @PutMapping("/change-price/{productId}/{newPrice}")
+    public ResponseEntity<?> changePrice(@PathVariable String productId,@PathVariable double newPrice) {
+        boolean success = productService.changePrice(productId, newPrice);
+        if (!success) {
+            return ResponseEntity.status(400).body(new ApiResponse("change price failed"));
+        }
+        return ResponseEntity.status(200).body(new ApiResponse("price updated"));
+    }
+
+    // discount
+    @PutMapping("/discount/{productId}/{percentage}")
+    public ResponseEntity<?> applyDiscount(@PathVariable String productId,@PathVariable double percentage) {
+        boolean success = productService.applyDiscount(productId, percentage);
+        if (!success) {
+            return ResponseEntity.status(400).body(new ApiResponse("failed"));
+        }
+        return ResponseEntity.status(200).body(new ApiResponse("discount applied"));
+    }
+
+
 }

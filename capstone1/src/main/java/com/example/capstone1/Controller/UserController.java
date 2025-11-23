@@ -57,7 +57,6 @@ public class UserController {
 
     @PostMapping("/buy/{userId}/{productId}/{merchantId}")
     public ResponseEntity<?> buyProduct(@PathVariable String userId, @PathVariable String productId, @PathVariable String merchantId) {
-
         boolean success = userService.buyProduct(userId, productId, merchantId);
         if (!success) {
             return ResponseEntity.status(400).body(new ApiResponse("failed"));
@@ -76,24 +75,24 @@ public class UserController {
         return ResponseEntity.status(200).body(user.getBalance());
     }
 
-    // endpoint4
-    @GetMapping("/highestBalance")
-    public ResponseEntity<?> highestBalance() {
 
-        ArrayList<User> users = userService.getUsers();
-
-        if (users.isEmpty()) return ResponseEntity.badRequest().body(new ApiResponse("no users"));
-
-        User max = users.get(0);
-
-        for (User u : users) {
-            if (u.getBalance() > max.getBalance()) max = u;
+    @PostMapping("/refund/{userId}/{productId}/{merchantId}")
+    public ResponseEntity<?> refund(@PathVariable String userId, @PathVariable String productId,@PathVariable String merchantId) {
+        boolean success = userService.refund(userId, productId, merchantId);
+        if (!success) {
+            return ResponseEntity.status(400).body(new ApiResponse("failed"));
         }
-        return ResponseEntity.status(200).body(max);
+        return ResponseEntity.status(200).body(new ApiResponse("refund completed"));
     }
 
-
-
+    @PostMapping("/transfer/{fromUserId}/{toUserId}/{amount}")
+    public ResponseEntity<?> transfer(@PathVariable String fromUserId,@PathVariable String toUserId,@PathVariable double amount) {
+        boolean success = userService.transfer(fromUserId, toUserId, amount);
+        if (!success) {
+            return ResponseEntity.status(400).body(new ApiResponse("failed"));
+        }
+        return ResponseEntity.status(200).body(new ApiResponse("transfer completed"));
+    }
 
 
 

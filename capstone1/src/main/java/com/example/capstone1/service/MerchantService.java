@@ -2,10 +2,11 @@ package com.example.capstone1.service;
 
 import com.example.capstone1.model.Merchant;
 import jakarta.validation.Valid;
+import lombok.Data;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-
+@Data
 @Service
 public class MerchantService {
 

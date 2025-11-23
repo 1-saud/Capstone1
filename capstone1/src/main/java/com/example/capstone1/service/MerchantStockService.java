@@ -1,24 +1,28 @@
 package com.example.capstone1.service;
 
+import com.example.capstone1.model.Merchant;
 import com.example.capstone1.model.MerchantStock;
 import com.example.capstone1.model.Product;
 import jakarta.validation.Valid;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 @Data
 @Service
+@RequiredArgsConstructor
 public class MerchantStockService {
 
-    private final ProductService product;
+    private final ProductService productService;
 
     ArrayList<MerchantStock> merchantStocks = new ArrayList<>();
 
     public ArrayList<MerchantStock> getMerchantStocks() {
         return merchantStocks;
     }
+    private final MerchantService merchantService;
 
-    public void addMerchantStock(@Valid MerchantStock merchantStock){
+    public void addMerchantStock(MerchantStock merchantStock){
         merchantStocks.add(merchantStock);
     }
 

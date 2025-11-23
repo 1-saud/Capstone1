@@ -52,26 +52,54 @@ public class UserService {
         }
         return null;
     }
-    public boolean buyProduct(String userId, String productId, String merchantId){
+
+
+    // سؤال
+    public boolean buyProduct(String userId, String productId, String merchantId) {
 
         User user = getUserById(userId);
+        if (user == null) return false;
         Product product = productService.getProductById(productId);
+        if (product == null) return false;
+
         MerchantStock stock = stockService.get(productId, merchantId);
+        if (stock == null) return false;
 
-        if (user == null || product == null || stock == null) {
-            return false;
-        }
-
-        if (stock.getStock() <= 0) {
-            return false;
-        }
-
-        if (user.getBalance() < product.getPrice()) {
-            return false;
-        }
+        if (stock.getStock() <= 0) return false;
+        if (user.getBalance() < product.getPrice()) return false;
 
         user.setBalance(user.getBalance() - product.getPrice());
         stock.setStock(stock.getStock() - 1);
+        return true;
+    }
+
+    // extra endpoints
+    public boolean refund(String userId, String productId, String merchantId) {
+        User user = getUserById(userId);
+        if (user == null) return false;
+
+        Product product = productService.getProductById(productId);
+        if (product == null) return false;
+
+        MerchantStock stock = stockService.get(productId, merchantId);
+        if (stock == null) return false;
+
+        user.setBalance(user.getBalance() + product.getPrice());
+        stock.setStock(stock.getStock() + 1);
+
+        return true;
+    }
+
+    public boolean transfer(String fromUserId, String toUserId, double amount) {
+        User from = getUserById(fromUserId);
+        User to = getUserById(toUserId);
+
+        if (from == null || to == null) return false;
+        if (amount <= 0) return false;
+        if (from.getBalance() < amount) return false;
+
+        from.setBalance(from.getBalance() - amount);
+        to.setBalance(to.getBalance() + amount);
 
         return true;
     }
